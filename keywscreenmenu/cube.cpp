@@ -75,7 +75,8 @@ void cube(TVout TV){
 double b = 0.3;
 double c = 1.0;
 double g = 0.0;
-double dis = 2.0;
+double h = 0.0;
+double dis = 0.5;
 bool spin = true;
 int key = 0;
 bool pressed = false;
@@ -87,17 +88,24 @@ if (Serial1.available() > 0){
   if (pressed){
     Serial.println(key);
     if (key == 97){dis+=.1;}
-    if (key == 100){dis-=.1;}
-    if (key == 49){b+=.1;}
-    if (key == 50){b-=.1;}  
+    if (key == 53){dis-=.1;}
+    if (key == 51){h-=.1;}
+    if (key == 99){h+=.1;}
+    if (key == 49){b+=.01;}
+    if (key == 50){b-=.01;}
+    if (key == 98){g+=.05;}
+    if (key == 107){g-=.05;}
+    if (key == 54){c+=.05;}
+    if (key == 52){c-=.05;}
 
+    //if (key == 100){spin = false;key=0;} 
     pressed = false;
   }
 
 if (spin){
   //b += .17;
-  c += .1;
-  g += .14;
+  //c += .1;
+  //g += .14;
   
 
 //b += .057;
@@ -110,18 +118,19 @@ for (int i = 0; i < 8; i++){
   //double z = vert[i][2];
   //double s[] = { vert[i][0], vert[i][1]*cos(b)+vert[i][2]*sin(b), -vert[i][1]*sin(b)+vert[i][2]*cos(b)};
   double* s = (double*) malloc(3 * sizeof(double));
-  double scale = 0.5;
+  double scale = 5.0;
   s[0]*=scale;
   s[1]*=scale;
   s[2]*=scale;
-  z_rot(vert[i], g, s);
+  x_rot(vert[i], g, s);
   //x_rot(vert[i], b, s);
   y_rot(s, c, s);
   //z_rot(s, g, s);
   s[2] += dis;
+  s[1] += h;
   //z_rot(s, g, s);
-  vert_2d[i][0] = round(       ( (s[1])/(s[2]*b+1) )*10       )+64;
-  vert_2d[i][1] = round(       ( (s[0])/(s[2]*b+1) )*10       )+48;
+  vert_2d[i][0] = round(       ( (s[1])/(s[2]*b+1) )*5       )+64;
+  vert_2d[i][1] = round(       ( (s[0])/(s[2]*b+1) )*5       )+48;
   free(s);
   //Serial.println(x_rot(vert[i],b)[1]);
 

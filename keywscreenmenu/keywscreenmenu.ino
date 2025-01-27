@@ -1,7 +1,6 @@
 #include <TVout.h>
 #include <fontALL.h>
-#include "cube.h"
-
+#include "programs.h"
 
 int w = 128;
 int h = 96;
@@ -22,14 +21,18 @@ void print_str(int x, int y, String s, bool cent = false){
   }
 }
 
+int menu2index(int p[2], int g[2]){
+  return (p[0]-1) + ((p[1]-1)*g[0]);
+}
+
 // crt origin is 0, 10
 // crt bottom right is is 105, 70
 //full range (0,0) -> (104,60)
 
-int box = 20;
+int box = 30;
 bool select = false;
 
-int grid[] = {4,3};
+int grid[] = {3,2};
 
 
 int pos[] = {1,1};
@@ -64,59 +67,33 @@ void loop() {
 
     pressed = false;
   }
-
+//keep the cursor from going out of bounds
 pos[0] = constrain(pos[0], 1, grid[0]);
 pos[1] = constrain(pos[1], 1, grid[1]);
 
 if (select){
-  if (pos[0] == 1 && pos[1] == 1){
-    cube(TV);
-  } 
+  ProgramChoice( menu2index(pos, grid), TV );
   select = false;
 }
 
 TV.clear_screen();
 
-//TV.println("Arduino Analog Read Tv");
-//TV.println("Arduino Analog Read Tv");
-//TV.draw_rect((w/4)-(box/2),(h/4)-15,30,30,0x60);
-//TV.draw_rect((w*3/4)-15,(h/4)-15,30,30,0x60);
-//TV.set_pixel(0, 0, 0x60);
-
+//draw box cursor
 TV.draw_rect(((w*pos[0])/(grid[0]+1))-(box/2)-1,((h*pos[1])/(grid[1]+1))-(box/2)-1,box+2,box+2,0x60);
-
-//TV.print_char(
-//((w*1)/(grid[0]+1)),
-//((h*1)/(grid[1]+1)),'B');
-
-print_str(
-((w*1)/(grid[0]+1)),
-((h*1)/(grid[1]+1)), "cube", true);
-
-
+//draw boxes and titles
 for (int i = 1; i <= grid[0]; i++){
   for (int j = 1; j <= grid[1]; j++){
+    int bx[2] = {i,j};
+    int dex = menu2index(bx, grid);
     TV.draw_rect(((w*i)/(grid[0]+1))-(box/2),((h*j)/(grid[1]+1))-(box/2),box,box,0x60);
-//TV.draw_line( x1, y1, x2, y2, 0x60 );
+    if (dex < getNTitles()){
+      print_str(
+      ((w*i)/(grid[0]+1)),
+      ((h*j)/(grid[1]+1)),
+      getTitles(dex),
+      true);
+    }
   }
 }
 delay(60);
-
-//for (int i = 0; i < 4; i++){
-//TV.set_pixel(vert_2d[i][0], vert_2d[i][1], 0x60);
-//}
-
-//float x = 0.0;
-//TV.draw_line(0,10,105,70,0x60);
-
-//TV.draw_circle(50, 40, 15, 0x60);
-//for(float i = 0.0; i <= 2*3.14159; i += .01){
-//  set_pixel( round(sin(i)*15)+50, round(cos(i)*15)+30 );
-//}
-
-
-//TV.set_pixel(105,70 ,0x60 );
-//TV.set_pixel(0,10 ,0x60 );
-//TV.bitmap(10, 10, Pi);
-
 }
