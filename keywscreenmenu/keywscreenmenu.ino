@@ -1,5 +1,5 @@
 #include <TVout.h>
-#include <fontALL.h>
+#include <font4x6.h>
 #include "programs.h"
 
 int w = 128;
