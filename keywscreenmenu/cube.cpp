@@ -59,6 +59,8 @@ void z_rot( double* p, double a, double* nwpt ){
    nwpt[1] = -p[0]*sin(a)+p[1]*cos(a);
    nwpt[2] = p[2];
 }
+
+
 void cube(TVout TV){
 
 
@@ -71,13 +73,13 @@ void cube(TVout TV){
 //void setup() {TV.begin(_NTSC,128,96);
 //Serial.begin(9600);}
 
-
+double zoom = 1.0;
 double b = 0.3;
 double c = 1.0;
 double g = 0.0;
 double h = 0.0;
 double dis = 0.5;
-bool spin = true;
+bool spin = false;
 int key = 0;
 bool pressed = false;
 while (key != 111) {
@@ -97,12 +99,21 @@ if (Serial1.available() > 0){
     if (key == 107){g-=.05;}
     if (key == 54){c+=.05;}
     if (key == 52){c-=.05;}
+    if (key == 55){zoom+=.1;}
+    if (key == 48){zoom-=.1;}
+    if (key == 106){spin = !spin;}
+
 
     //if (key == 100){spin = false;key=0;} 
     pressed = false;
   }
-
 if (spin){
+  g+=.05;
+  c+=.07;
+
+}
+
+if (true){
   //b += .17;
   //c += .1;
   //g += .14;
@@ -129,8 +140,8 @@ for (int i = 0; i < 8; i++){
   s[2] += dis;
   s[1] += h;
   //z_rot(s, g, s);
-  vert_2d[i][0] = round(       ( (s[1])/(s[2]*b+1) )*5       )+64;
-  vert_2d[i][1] = round(       ( (s[0])/(s[2]*b+1) )*5       )+48;
+  vert_2d[i][0] = round(       ( (s[1])/(s[2]*b+1) )*5*zoom       )+64;
+  vert_2d[i][1] = round(       ( (s[0])/(s[2]*b+1) )*5*zoom       )+48;
   free(s);
   //Serial.println(x_rot(vert[i],b)[1]);
 

@@ -13,17 +13,19 @@ void gopos(int x, int y){
   pos[0] = x;
   pos[1] = y;
 }
-
+int width = (int)(stepsPerRevolution*3.25);
+int height = (int)(stepsPerRevolution*2.25);
+int center[] = {(int)(width/2.),(int)(height/2.)};
 void setup(){
   stepper1.setSpeed(8); // set the speed at 8 rpm
   stepper2.setSpeed(8);
   Serial.begin(9600); // initialize the serial port
-  //stepper1.step(-(int)(stepsPerRevolution*3.25));
-  //stepper2.step(-(int)(stepsPerRevolution*2.25));
-  //gopos(3000,3000);
+  stepper1.step(-width);
+  stepper2.step(-height);
+  gopos(3000,3000);
   for (int i = 0; i < 1000; i++){
     float period = ((i/1000.)*2.*pi);
-    gopos( round(cos( period*5 ) * 2000) , round(sin( period*4 ) * 2000) );
+    gopos( round(cos( period*5. ) * 2000)+center[0] , round(sin( period*4. ) * 2000)+center[1] );
   }
   gopos(0,0);
 }
